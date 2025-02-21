@@ -1,0 +1,32 @@
+.save {
+    padding: 1em 2em;
+    background-color: #0b8a93;
+    border: none;
+    user-select: none;
+    cursor: pointer;
+    font-size: 20px;
+    text-transform: uppercase;
+    transition: all 0.5s linear;
+    color: #fff;
+}
+
+.save:hover {
+    background-color: #118e2a;
+    border-radius: 0;
+    scale: 1.1;
+}
+
+.save::after {
+    content: '';
+    background: #0ebac5;
+    width: 0;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+    z-index: -1;
+}
+
+.save:hover::after {
+    width: 100%;
+}
