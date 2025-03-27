@@ -9,8 +9,8 @@ async def AddDataDescriptor(state):
         # Only use the asynchronous connection
         async with aiosqlite.connect(db) as conn:
             
-            await conn.execute("""INSERT INTO create_blog (blog_id, blog_name, blog_subject, blog_details) VALUES (?, ?, ?, ?);""", 
-                               (state.blog_id, state.blog_name, state.blog_subject, state.blog_details))
+            await conn.execute("""INSERT INTO Blogs (user_id, blog_title, blog_subject, blog_content) VALUES (?, ?, ?, ?);""", 
+                               (state.user_id, state.blog_title, state.blog_subject, state.blog_content))
             await conn.commit()
 
         return {"message": "Data Added Successfully!!"}
@@ -18,20 +18,21 @@ async def AddDataDescriptor(state):
     except aiosqlite.Error as error:
         print("Failed to insert data into sqlite table", error)
         return {"error": str(error)}
-    
+     
 async def getDataDescriptor():
     try:
 
         async with aiosqlite.connect(db) as conn:
-            async with conn.execute("SELECT * FROM create_blog") as cursor:
+            async with conn.execute("SELECT blog_id,blog_title,blog_subject,blog_content,user_id FROM Blogs") as cursor:
                 rows = await cursor.fetchall()
+
             data = [
                 {
-                    "id":row[0],
-                    "blog_id": row[1],
-                    "blog_name": row[2],
-                    "blog_subject": row[3],
-                    "blog_details": row[4]
+                    "blog_id": row[0],
+                    "blog_title": row[1],
+                    "blog_subject": row[2],
+                    "blog_content": row[3],
+                    "user_id": row[4]
                 }
                 for row in rows
             ]
@@ -42,13 +43,13 @@ async def getDataDescriptor():
         print("Failed to retrieve data: ", error)
         return {"error": str(error)}
     
-async def deleteDataDescriptor(id):
+async def deleteDataDescriptor(id,user_id):
     try:
 
 
         async with aiosqlite.connect(db) as conn:
-            delete_query = """DELETE FROM create_blog WHERE id = ?"""
-            delete_params = (id,)
+            delete_query = """DELETE FROM Blogs WHERE blog_id = ? and user_id = ?"""
+            delete_params = (id,user_id,)
             await conn.execute(delete_query,delete_params)
             await conn.commit()
 
@@ -58,15 +59,16 @@ async def deleteDataDescriptor(id):
         print("Failed to retrieve data: ", error)
         return {"error": str(error)}       
     
-async def editDataDescriptor(id,state):
+async def editDataDescriptor(id,user_id,state):
+    print(id,user_id)
     try:
 
         async with aiosqlite.connect(db) as conn:
-            update_query = """UPDATE create_blog set
-                            blog_name = ?, blog_subject = ?, blog_details = ?
-                            WHERE id = ?;"""
+            update_query = """UPDATE Blogs set
+                            blog_title = ?, blog_subject = ?, blog_content = ?
+                            WHERE blog_id = ? AND user_id = ?;"""
 
-            update_params = (state.blog_name, state.blog_subject, state.blog_details,id,)
+            update_params = (state.blog_title, state.blog_subject, state.blog_content,id,user_id,)
 
             await conn.execute(update_query,update_params)
             await conn.commit()

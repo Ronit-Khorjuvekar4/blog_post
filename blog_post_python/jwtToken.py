@@ -41,7 +41,7 @@ def create_refresh_token(data: dict, expires_delta: timedelta = None):
 
 def verify_token(token: str = Depends(oauth2_scheme)):
     
-    print("Authorization Header:", token) 
+    # print("Authorization Header:", token) 
     
     if not token:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token missing")

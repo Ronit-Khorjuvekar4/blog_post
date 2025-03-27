@@ -8,8 +8,8 @@ async def registerDescriptor(state):
     try:
         
         async with aiosqlite.connect(db) as conn:
-            insert_query = """INSERT INTO register (user_name,password) VALUES (?,?) """
-            insert_params = (state.user_name,state.password)
+            insert_query = """INSERT INTO Users (user_name,password_hash,user_type,email) VALUES (?,?,?,?) """
+            insert_params = (state.user_name,state.password,state.user_type,state.email)
 
             await conn.execute(insert_query,insert_params)
             await conn.commit()
@@ -25,9 +25,9 @@ async def loginDescriptor(state):
         async with aiosqlite.connect(db) as conn:
             select_query =  """
                                 SELECT 
-                                    id,user_name, user_type
-                                from register
-                                where user_name = ? and password = ?
+                                    user_id,user_name, user_type
+                                from Users
+                                where user_name = ? and password_hash = ?
                             """
             select_params = (state.user_name,state.password)
             async with conn.execute(select_query,select_params) as cursor:
@@ -37,7 +37,7 @@ async def loginDescriptor(state):
                  raise HTTPException(status_code=401, detail="Invalid credentials")
             
             data = {
-                "id":row[0],
+                "user_id":row[0],
                 "user_name" : row[1],
                 "user_type":row[2]
             }

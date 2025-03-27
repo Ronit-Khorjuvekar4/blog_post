@@ -9,7 +9,7 @@ const UserProtectedRoute = () => {
 
     return (
         <div>
-            <h2>Welcome, {user.user_name}</h2>
+            {/* <h2>Welcome, {user.user_name}</h2> */}
             {/* You can add a user-specific navigation bar here */}
             <Outlet />  {/* Renders the nested routes */}
         </div>

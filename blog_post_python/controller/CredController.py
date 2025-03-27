@@ -21,8 +21,8 @@ async def loginController(state):
     
     access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))  
     refresh_token_expires = timedelta(minutes=int(REFRESH_TOKEN_EXPIRE_MINUTES))  
-    access_token = create_access_token(data={"user_name": res['data']['user_name'],"user_type":res['data']['user_type'],"id":res['data']['id']}, expires_delta=access_token_expires)
-    refresh_token = create_refresh_token(data={"user_name": res['data']['user_name'],"user_type":res['data']['user_type'],"id":res['data']['id']}, expires_delta=refresh_token_expires)
+    access_token = create_access_token(data={"user_name": res['data']['user_name'],"user_type":res['data']['user_type'],"user_id":res['data']['user_id']}, expires_delta=access_token_expires)
+    refresh_token = create_refresh_token(data={"user_name": res['data']['user_name'],"user_type":res['data']['user_type'],"user_id":res['data']['user_id']}, expires_delta=refresh_token_expires)
     
     return {
         "access_token": access_token,
@@ -33,7 +33,7 @@ async def refreshTokenController(res):
     try:
         username = res.get("user_name")
         user_type = res.get("user_type")
-        id = res.get("id")
+        id = res.get("user_id")
 
         if not username:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid refresh token")

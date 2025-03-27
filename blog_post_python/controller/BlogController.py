@@ -14,12 +14,12 @@ async def getDataController():
     res = await getDataDescriptor()
     return res
 
-async def deleteDataController(id):
-    res = await deleteDataDescriptor(id)
+async def deleteDataController(id,user_id):
+    res = await deleteDataDescriptor(id,user_id)
     return res
 
-async def editDataController(id,state):
-    res = await editDataDescriptor(id,state)
+async def editDataController(id,user_id,state):
+    res = await editDataDescriptor(id,user_id,state)
     return res
 
 async def addProfileController(state):

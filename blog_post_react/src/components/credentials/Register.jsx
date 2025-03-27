@@ -11,11 +11,13 @@ const Register = () => {
 
         setFormData({
             ...formData,
-            [name]:value
+            [name]:value,
+            user_type : "user"
         })
     }
 
     const handleSubmit = async(e) => {
+        console.log(formData)
         try{
 
             const res = await sendRequest("POST","register",formData ? formData : null)
@@ -49,6 +51,18 @@ const Register = () => {
                                         name="user_name" 
                                         onChange={handleChange} 
                                         value={formData.user_name} 
+                                        required
+                                    />
+                                </div>
+
+                                <div className="input-wrapper">
+                                    <label htmlFor="email">Email</label>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        onChange={handleChange} 
+                                        value={formData.email} 
                                         required
                                     />
                                 </div>
